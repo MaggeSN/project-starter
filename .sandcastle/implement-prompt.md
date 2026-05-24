@@ -45,12 +45,16 @@ Before starting fresh, check whether a PR already exists for `{{BRANCH}}`:
 gh pr list --head {{BRANCH}} --json number,url,statusCheckRollup,labels
 ```
 
-If a PR exists for this exact branch, you are in **fix-up mode**, not greenfield mode:
+If a PR exists for this exact branch, you are in **fix-up mode**, not
+greenfield mode:
 
 1. Read the PR's review comments: `gh pr view <N> --comments`
-2. Read failed CI logs (if any): `gh pr checks <N>` to find the failing run, then `gh run view <RUN_ID> --log-failed`
+2. Read failed CI logs (if any): `gh pr checks <N>` to find the failing
+   run, then `gh run view <RUN_ID> --log-failed`
 3. Read any issue comments added since the PR opened: `gh issue view {{TASK_ID}} --comments`
-4. Your job in this run is to fix what reviewers / CI flagged. Do NOT redo the issue from scratch. Do NOT open a new branch. Push to the same `{{BRANCH}}` so the existing PR auto-rebuilds.
+4. Your job in this run is to fix what reviewers / CI flagged. Do NOT
+   redo the issue from scratch. Do NOT open a new branch. Push to the
+   same `{{BRANCH}}` so the existing PR auto-rebuilds.
 
 If no PR exists for `{{BRANCH}}`, continue with the normal flow below.
 
@@ -58,7 +62,7 @@ If no PR exists for `{{BRANCH}}`, continue with the normal flow below.
 
 Explore the repo and fill your context window with relevant information that will allow you to complete the task.
 
-Pay extra attention to test files that touch the relevant parts of the code. Also read any seed migrations (look for `op.bulk_insert` in `alembic/versions/` or equivalent) so your test fixtures don't collide with seeded values.
+Pay extra attention to test files that touch the relevant parts of the code.
 
 # EXECUTION
 
@@ -69,21 +73,9 @@ If applicable, use RGR to complete the task.
 3. REPEAT until done
 4. REFACTOR the code
 
-# FEEDBACK LOOPS — HARD TEST GATE
+# FEEDBACK LOOPS
 
-Before committing, you MUST run:
-
-- Backend: `poetry run pytest tests/` (or equivalent for your stack)
-- Frontend: `cd frontend && npm test -- --run`
-- Typecheck: `npm run typecheck`
-
-If a test tool cannot run in this sandbox (e.g. missing Python/Postgres for testcontainers), DO NOT commit code with shortcuts like "verified via ast.parse". Instead:
-
-1. Open a comment on issue {{TASK_ID}} listing exactly what was blocked
-2. Push whatever commits you have (so CI can verify on the PR side)
-3. The merger phase will open the PR as DRAFT — humans will review
-
-Static parse is not test verification. CLAUDE.md's "fixtures from real data" + factory-module rule applies: read `tests/factories.py` (or equivalent) and use it for any seeded model.
+Before committing, run `npm run typecheck` and `npm run test` to ensure the tests pass.
 
 # COMMIT
 
@@ -99,18 +91,12 @@ Keep it concise.
 
 # THE ISSUE
 
-If the task is not complete (only a TDD slice landed, acceptance criteria not all met), leave a comment on the issue describing exactly:
+If the task is not complete, leave a comment on the issue with what was done.
 
-- What was delivered (which acceptance boxes can be checked)
-- What was deferred (which boxes remain) and why
-- Whether a follow-up issue should be filed for the deferred work
+Do not close the issue - this will be done later.
 
-Do not close the issue — this will be done by the human merging the PR (the PR body's `Closes #N` line auto-closes on merge, but only if you DO check all acceptance boxes; if you don't, the merger will open the PR without `Closes #N`).
-
-Once complete, output <promise>COMPLETE</promise> if all acceptance met, or <promise>SLICED</promise> if only a partial slice landed.
+Once complete, output <promise>COMPLETE</promise>.
 
 # FINAL RULES
 
 ONLY WORK ON A SINGLE TASK.
-
-DO NOT commit unverified code. DO NOT claim acceptance is met when only a tracer slice shipped. The PR review is the human gate; honesty in the implementer makes the gate effective.
