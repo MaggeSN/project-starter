@@ -44,9 +44,13 @@ frontend/dist/
 frontend/dev-dist/
 frontend/.vite/
 
-# Sandcastle (local-only orchestrator)
-.sandcastle*
-.sandcastle/
+# Sandcastle: track the orchestrator (prompts, Dockerfile, main.mts)
+# but NOT runtime artifacts (env, logs, per-issue worktrees).
+.sandcastle/.env-sandcastle
+.sandcastle/.env
+.sandcastle/logs/
+.sandcastle/worktrees/
+.env-sandcastle
 
 # Project-local Claude skills (already in tree once; don't auto-track future ones)
 # .claude/
