@@ -1,0 +1,52 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+.tox/
+
+dist/
+build/
+*.egg-info/
+
+# Env + venv
+.env
+.env.prod
+.env-sandcastle
+.venv/
+venv/
+env/
+
+# Editors
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+
+# Project data
+postgres_data/
+
+# Node — catch ALL levels (root + frontend + sandcastle worktrees).
+# Sandcastle copies node_modules into per-issue worktrees; if you only
+# ignore frontend/node_modules/, a sandcastle merge can leak full
+# node_modules contents (Claude Agent SDK binaries are 230MB each) into
+# git history. Catch every level.
+node_modules/
+frontend/node_modules/
+frontend/dist/
+frontend/dev-dist/
+frontend/.vite/
+
+# Sandcastle (local-only orchestrator)
+.sandcastle*
+.sandcastle/
+
+# Project-local Claude skills (already in tree once; don't auto-track future ones)
+# .claude/
